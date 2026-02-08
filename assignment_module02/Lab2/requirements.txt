@@ -1,0 +1,7 @@
+# Shiny app (shinyApp_methane_data.py) — includes C-lock API (my_api_query_lab.py)
+shiny
+shinywidgets
+pandas
+plotly
+python-dotenv
+jinja2

@@ -1,0 +1,5 @@
+Question	Answer
+API name	C-Lock REST API (C-Lock Inc. Portal API)
+Documentation URL	httpsportal.c-lockinc.comapihelp
+API key required	No; uses usernamepassword to obtain a JWT
+Credentials obtained	Yes; stored in .env as CLOCK_USER and CLOCK_PASS
