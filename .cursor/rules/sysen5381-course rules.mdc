@@ -1,0 +1,46 @@
+---
+description: Core guidance for SYSEN 5381 assignments in this repo
+alwaysApply: true
+---
+
+# SYSEN 5381 Course Rules for Cursor
+
+- **Repository scope**
+  - This project contains assignment folders like `assignment_module01`, `assignment_module02`, and related course materials.
+  - Treat this repo as course work: keep solutions clear, well commented, and easy to follow.
+
+- **Language and tools**
+  - Always prefer Python for examples, starter code, and implementations (use R only when an assignment explicitly calls for it).
+  - When adding packages, also update `requirements.txt` in the relevant assignment folder.
+  - Avoid heavy, unnecessary dependencies unless clearly justified by the task.
+  - When installing Python packages in a terminal, use `py -m pip install ...` (e.g., `py -m pip install requests`) instead of calling `pip` directly, since Python may not be on the same path as Cursor.
+
+- **Code style**
+  - Follow clear, readable code style (PEP 8 for Python).
+  - Use descriptive variable and function names (e.g., `load_methane_data`, `plot_time_series`).
+  - Add short docstrings or comments to explain non-trivial logic, especially for steps required in the assignment instructions.
+
+- **Reproducibility**
+  - Prefer deterministic behavior where possible (e.g., set random seeds in simulations).
+  - Keep file paths relative to the assignment folder rather than absolute paths on the local machine.
+  - When reading data, clearly indicate expected input file names and locations in comments or the README.
+
+- **Outputs and figures**
+  - When generating plots or figures for submission, save them with informative file names (e.g., `activity1_methane_trend.png`).
+  - Avoid writing large intermediate data files to the repo unless required; summarize results instead.
+
+- **Explanations and writeups**
+  - When helping with written answers, provide concise, clear explanations suitable for short assignment responses.
+  - Emphasize interpretation of results and connection to system engineering / data science concepts when relevant.
+
+- **Academic integrity**
+  - Do not fabricate data or claim that results were obtained from real experiments when they are simulated.
+  - When reusing patterns from documentation or online examples, adapt and explain them in your own words.
+
+- **Git and GitHub workflow**
+  - At the end of a working session in this repo, remind the user to commit and push changes to GitHub.
+  - Provide the exact commands (PowerShell-friendly) as a checklist, for example:
+    - `git status`
+    - `git add .`
+    - `git commit -m "Meaningful message about what changed"`
+    - `git push origin main`
