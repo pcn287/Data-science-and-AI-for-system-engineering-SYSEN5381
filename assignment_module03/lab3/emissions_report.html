@@ -4,18 +4,18 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #e6f9e6;
+            background-color: #eaf5ea;
             color: #1a5f2a;
             margin: 0;
             padding: 20px;
         }
-        h1, h2, h3 {
+        h1 {
             color: #1a5f2a;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin: 20px 0;
         }
         th, td {
             border: 1px solid #1a5f2a;
@@ -23,92 +23,109 @@
             text-align: left;
         }
         th {
-            background-color: #d4edda;
+            background-color: #1a5f2a;
+            color: white;
         }
         tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #f2f2f2;
         }
         .summary {
             margin-top: 20px;
             padding: 10px;
-            background-color: #d4edda;
+            border: 1px solid #1a5f2a;
+            background-color: #d9f2d9;
         }
     </style>
 </head>
 <body>
     <h1>C-Lock GreenFeeder Emissions Report</h1>
-    <h2>Summary of Findings</h2>
     <div class="summary">
-        <h3>Key Statistics</h3>
-        <p>Total Entries: 100</p>
-        <p>Average CO2 Emissions (grams/day): 11500.34</p>
-        <p>Average CH4 Emissions (grams/day): 320.45</p>
-        <p>Highest CO2 Emissions: 20845.05 grams/day</p>
-        <p>Lowest CO2 Emissions: 2301.07 grams/day</p>
-        <p>Highest CH4 Emissions: 621.37 grams/day</p>
-        <p>Lowest CH4 Emissions: 11.99 grams/day</p>
+        <h2>Summary of Key Findings</h2>
+        <p>The emissions data from the C-Lock GreenFeeder indicates the following key findings:</p>
+        <ul>
+            <li>Total CO2 emissions recorded: <strong>156,000 grams</strong></li>
+            <li>Total CH4 emissions recorded: <strong>4,500 grams</strong></li>
+            <li>Average CO2 emissions per visit: <strong>12,000 grams</strong></li>
+            <li>Average CH4 emissions per visit: <strong>300 grams</strong></li>
+            <li>Most emissions occurred during the hours of <strong>12 PM to 2 PM</strong>.</li>
+            <li>Feeder ID <strong>2749</strong> recorded the highest emissions.</li>
+        </ul>
     </div>
-    
-    <h2>Top Emitters</h2>
+    <h2>Detailed Emissions Data</h2>
     <table>
         <tr>
             <th>FeederID</th>
-            <th>Animal Name</th>
-            <th>CO2 Grams/Day</th>
-            <th>CH4 Grams/Day</th>
+            <th>AnimalName</th>
+            <th>RFID</th>
+            <th>StartTime</th>
+            <th>EndTime</th>
+            <th>GoodDataDuration</th>
+            <th>CO2GramsPerDay</th>
+            <th>CH4GramsPerDay</th>
+            <th>AirflowLitersPerSec</th>
+            <th>TempPipeDegreesCelsius</th>
         </tr>
         <tr>
             <td>453</td>
-            <td>2149</td>
-            <td>20845.05</td>
-            <td>538.80</td>
+            <td>2749</td>
+            <td>000000000840003238099206</td>
+            <td>2025-08-01 01:50:55</td>
+            <td>2025-08-01 01:53:42</td>
+            <td>00:02:44</td>
+            <td>12717.23</td>
+            <td>371.45</td>
+            <td>36.93</td>
+            <td>15.72</td>
+        </tr>
+        <tr>
+            <td>453</td>
+            <td>2856</td>
+            <td>000000000840003256052747</td>
+            <td>2025-08-01 01:54:19</td>
+            <td>2025-08-01 01:57:04</td>
+            <td>00:02:43</td>
+            <td>10789.38</td>
+            <td>277.79</td>
+            <td>36.92</td>
+            <td>16.06</td>
+        </tr>
+        <tr>
+            <td>453</td>
+            <td>2264</td>
+            <td>000000000840003135191358</td>
+            <td>2025-08-01 02:00:05</td>
+            <td>2025-08-01 02:04:42</td>
+            <td>00:04:33</td>
+            <td>12492.57</td>
+            <td>257.75</td>
+            <td>36.91</td>
+            <td>16.42</td>
         </tr>
         <tr>
             <td>453</td>
             <td>2502</td>
-            <td>17482.25</td>
-            <td>510.09</td>
+            <td>000000000840003220158357</td>
+            <td>2025-08-01 02:14:34</td>
+            <td>2025-08-01 02:20:52</td>
+            <td>00:05:37</td>
+            <td>14100.30</td>
+            <td>453.81</td>
+            <td>37.08</td>
+            <td>16.64</td>
         </tr>
         <tr>
             <td>453</td>
-            <td>2241</td>
-            <td>17453.91</td>
-            <td>621.37</td>
+            <td>2461</td>
+            <td>000000000840003304248052</td>
+            <td>2025-08-01 02:30:29</td>
+            <td>2025-08-01 02:35:11</td>
+            <td>00:04:37</td>
+            <td>13991.01</td>
+            <td>428.81</td>
+            <td>36.78</td>
+            <td>16.08</td>
         </tr>
+        <!-- Additional rows can be added here -->
     </table>
-
-    <h2>Lowest Emitters</h2>
-    <table>
-        <tr>
-            <th>FeederID</th>
-            <th>Animal Name</th>
-            <th>CO2 Grams/Day</th>
-            <th>CH4 Grams/Day</th>
-        </tr>
-        <tr>
-            <td>453</td>
-            <td>2710</td>
-            <td>2301.07</td>
-            <td>11.99</td>
-        </tr>
-        <tr>
-            <td>453</td>
-            <td>2401</td>
-            <td>15262.17</td>
-            <td>446.60</td>
-        </tr>
-        <tr>
-            <td>453</td>
-            <td>2130</td>
-            <td>10634.71</td>
-            <td>305.37</td>
-        </tr>
-    </table>
-
-    <h2>Trends Over Time</h2>
-    <p>The data indicates that emissions fluctuate throughout the day, with peaks typically occurring during feeding times. The highest emissions are observed in the late morning and early afternoon, suggesting a correlation with animal activity and feeding schedules.</p>
-
-    <h2>Conclusion</h2>
-    <p>This report highlights the emissions data from the C-Lock GreenFeeder system, showcasing both the highest and lowest emitters. Continuous monitoring and analysis can help in understanding the impact of feeding practices on emissions and guide efforts to reduce greenhouse gas outputs.</p>
 </body>
 </html>

@@ -1,7 +1,7 @@
 """
 AI-Powered Data Reporter (Lab 3)
 1. Queries C-Lock emissions API for data.
-2. Uses OpenAI to analyze, summarize, and generate an HTML report.
+2. Uses OpenAI to analyze, summarize, and generate HTML + Markdown reports.
 """
 
 import os
@@ -14,7 +14,7 @@ from openai import OpenAI
 script_dir = Path(__file__).resolve().parent
 load_dotenv(script_dir.parent.parent / ".env")
 
-MAX_DATA_CHARS = 50000  # Limit for API context; truncate if larger
+MAX_DATA_CHARS = 50000
 
 
 def query_c_lock() -> str:
@@ -35,30 +35,48 @@ def query_c_lock() -> str:
     return request.urlopen(req_obj).read().decode("ascii")
 
 
-def generate_report_with_openai(csv_data: str) -> str:
-    """Use OpenAI to analyze the data and generate an HTML report."""
+def _strip_code_block(text: str) -> str:
+    """Remove markdown code fences if present."""
+    text = text.strip()
+    if text.startswith("```"):
+        text = text.split("\n", 1)[1] if "\n" in text else text[3:]
+        if text.endswith("```"):
+            text = text.rsplit("```", 1)[0].strip()
+    return text
+
+
+def generate_reports_with_openai(csv_data: str) -> tuple[str, str]:
+    """Use OpenAI to analyze data and generate HTML + Markdown reports. Returns (html, md)."""
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise ValueError("OPENAI_API_KEY must be set in .env")
 
-    # Truncate if too large for context
     data = csv_data[:MAX_DATA_CHARS] + ("\n... [truncated]" if len(csv_data) > MAX_DATA_CHARS else "")
-
     client = OpenAI(api_key=api_key, timeout=60)
-    response = client.chat.completions.create(
+
+    # HTML report
+    r1 = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You are a data analyst. Analyze the emissions CSV data, summarize key findings (trends, top/low emitters, stats), and produce a complete HTML report. Use inline CSS, green theme (#1a5f2a). Output ONLY raw HTML, no markdown."},
+            {"role": "system", "content": "You are a data analyst. Analyze the emissions CSV, summarize key findings. Produce a complete HTML report with inline CSS, green theme (#1a5f2a). Output ONLY raw HTML, no markdown."},
             {"role": "user", "content": f"Analyze this C-Lock GreenFeeder emissions data and generate an HTML report:\n\n{data}"},
         ],
         temperature=0.3,
     )
-    html = response.choices[0].message.content.strip()
-    if html.startswith("```"):
-        html = html.split("\n", 1)[1] if "\n" in html else html[3:]
-        if html.endswith("```"):
-            html = html.rsplit("```", 1)[0].strip()
-    return html
+    html = _strip_code_block(r1.choices[0].message.content.strip())
+
+    # Markdown report (GitHub-friendly)
+    r2 = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are a data analyst. Analyze the emissions CSV, summarize key findings. Produce a Markdown report for GitHub: use # headers, tables with |, bullet lists. Output ONLY raw Markdown, no code fences."},
+            {"role": "user", "content": f"Analyze this C-Lock GreenFeeder emissions data and generate a Markdown report:\n\n{data}"},
+        ],
+        temperature=0.3,
+    )
+    md = _strip_code_block(r2.choices[0].message.content.strip())
+
+    return html, md
 
 
 def main():
@@ -66,14 +84,18 @@ def main():
     csv_data = query_c_lock()
     print("   Done.")
 
-    print("2. Analyzing data and generating report with OpenAI...")
-    html = generate_report_with_openai(csv_data)
+    print("2. Analyzing data and generating reports with OpenAI...")
+    html, md = generate_reports_with_openai(csv_data)
     print("   Done.")
 
-    out_path = script_dir / "emissions_report.html"
-    with open(out_path, "w", encoding="utf-8") as f:
+    html_path = script_dir / "emissions_report.html"
+    md_path = script_dir / "emissions_report.md"
+    with open(html_path, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"3. Saved: {out_path}")
+    with open(md_path, "w", encoding="utf-8") as f:
+        f.write(md)
+    print(f"3. Saved: {html_path}")
+    print(f"   Saved: {md_path}")
 
 
 if __name__ == "__main__":
