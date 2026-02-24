@@ -1,0 +1,6 @@
+shiny
+shinywidgets
+pandas
+plotly
+python-dotenv
+openai
