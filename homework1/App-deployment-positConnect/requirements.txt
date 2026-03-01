@@ -1,0 +1,7 @@
+# Homework 1: AI-Powered Reporter Software (Posit Connect)
+shiny
+shinywidgets
+pandas
+plotly
+python-dotenv
+openai
