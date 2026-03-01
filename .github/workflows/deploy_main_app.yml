@@ -28,3 +28,4 @@ jobs:
           access-type: acl
           dir: homework1/App-deployment-positConnect
           force: false
+          show-logs: true
