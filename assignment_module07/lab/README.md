@@ -15,5 +15,3 @@ py lab_rag.py
 ## Brief explanation (assignment)
 
 **Data:** Visit-level CH₄, feeder, animal, date from the **C-Lock API** or a **local CSV** so the lab matches real data and works offline. **Retrieval:** rank animals by visit count, keep the **top half**, build JSON with subset stats, per-animal aggregates, and a small row sample; **`search_emissions`** optionally filters by animal, feeder, and dates. **System prompt:** methane analyst role, context is **only** those frequent visitors; output short Markdown (scope vs totals, CH₄ table, by-animal summary, two interpretation sentences), no code fences.
-
-`01_ollama.py` is unused by this script (OpenAI replaced Ollama).
