@@ -1,0 +1,5 @@
+# homework2/homework.py — OpenAI + statsmodels + pandas + C-Lock or CSV
+pandas>=2.0.0
+openai>=1.0.0
+python-dotenv>=1.0.0
+statsmodels>=0.14.0

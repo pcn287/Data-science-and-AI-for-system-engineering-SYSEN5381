@@ -1,10 +1,11 @@
-# lab_tool_function.py
-# C-Lock emissions: retrieval filter + Agent 2 with function calling (linear mixed model).
+# homework.py - Homework 2: RAG + multi-stage workflow + OpenAI function calling (LMM tool).
 #
-# Agent 1 (code): loads data, applies >= MIN_VISITS_PER_DAY filter, builds rag_payload + visit-level
-#   observations (animal, ch4, co2) for modeling.
-# Agent 2 (LLM + tool): must call fit_lmm_ch4_on_co2 (CH4 ~ CO2, random intercept for animal);
-#   Python runs statsmodels MixedLM; tool output returns to the model for a Markdown report.
+# Agent 1 (code): loads C-Lock API or CSV, applies >= MIN_VISITS_PER_DAY filter, builds rag_payload +
+#   visit-level observations (animal, ch4, co2) for modeling.
+# Agent 2 (LLM + tool): calls fit_lmm_ch4_on_co2 (CH4 ~ CO2, random intercept for animal); tool output
+#   returns to the model for a Markdown report.
+#
+# Tagged lines: [Agent 1], [RAG], [Agent 2]. Verbose banners + RAG JSON + tool traces: HOMEWORK_PIPELINE_SECTIONS=1
 
 # 0. SETUP ###################################
 
@@ -47,6 +48,31 @@ LOAD_DOTENV_PATHS = [
     os.path.join(REPO_ROOT, ".env"),
     os.path.join(REPO_ROOT, "assignment_module01", "lab_submission", ".env"),
 ]
+
+# Extra pipeline banners, RAG JSON, function-calling dumps. Default off; set HOMEWORK_PIPELINE_SECTIONS=1 for detail.
+HOMEWORK_PIPELINE_SECTIONS = os.environ.get("HOMEWORK_PIPELINE_SECTIONS", "0").strip().lower() not in (
+    "0",
+    "false",
+    "no",
+)
+
+
+def print_pipeline_section(title: str, *detail_lines: str) -> None:
+    if not HOMEWORK_PIPELINE_SECTIONS:
+        return
+    bar = "=" * 72
+    print(f"\n{bar}", flush=True)
+    print(f"  {title}", flush=True)
+    for line in detail_lines:
+        print(f"  {line}", flush=True)
+    print(f"{bar}\n", flush=True)
+
+
+def _trunc_text(text: str, max_chars: int = 2200) -> str:
+    text = str(text)
+    if len(text) <= max_chars:
+        return text
+    return text[:max_chars] + f"\n  ... [{len(text) - max_chars} more characters omitted]"
 
 
 def _load_env():
@@ -269,6 +295,11 @@ def run_agent2_lmm_then_report(
             ],
         }
     )
+    if HOMEWORK_PIPELINE_SECTIONS:
+        print_pipeline_section(
+            "FUNCTION CALLING - LLM requested a tool; Python executes and returns result to the API",
+            "OpenAI message includes tool_calls; your code runs the named function and appends role=tool.",
+        )
     for tc in msg.tool_calls:
         name = tc.function.name
         raw_args = tc.function.arguments or "{}"
@@ -294,6 +325,19 @@ def run_agent2_lmm_then_report(
             print(out, flush=True)
             print("=" * 60 + "\n", flush=True)
 
+        if HOMEWORK_PIPELINE_SECTIONS:
+            print(f"  [Function calling] tool_call_id: {tc.id}", flush=True)
+            print(f"  [Function calling] function: {name}", flush=True)
+            print(f"  [Function calling] arguments: {raw_args}", flush=True)
+            if name == "fit_lmm_ch4_on_co2":
+                print(
+                    "  [Function calling] tool result: full LMM summary printed in block above.",
+                    flush=True,
+                )
+            else:
+                print("  [Function calling] tool result (excerpt):", flush=True)
+                print(_trunc_text(out, 2800), flush=True)
+            print(flush=True)
         messages.append(
             {"role": "tool", "tool_call_id": tc.id, "content": str(out)}
         )
@@ -455,18 +499,24 @@ def load_emissions_data():
     if csv_raw is not None and not df.empty:
         print("[OK] Data loaded from C-Lock API")
         return df
-    # Fallback to local CSV: check parent folder first, then script folder
-    for base in (REPO_ROOT, script_dir):
+    # Fallback: local CSV (repo root, homework2/, assignment_module08/, lab_tools/)
+    csv_bases = (
+        REPO_ROOT,
+        script_dir,
+        os.path.join(REPO_ROOT, "assignment_module08"),
+        os.path.join(REPO_ROOT, "assignment_module08", "lab_tools"),
+    )
+    for base in csv_bases:
         csv_path = os.path.join(base, LOCAL_CSV)
         if os.path.isfile(csv_path):
             with open(csv_path, "r", encoding="utf-8") as f:
                 csv_raw = f.read()
             df = parse_csv_to_df(csv_raw)
-            print("[OK] Data loaded from local CSV (C-Lock API unavailable or keys missing)")
+            print(f"[OK] Data loaded from local CSV: {csv_path}")
             return df
     raise FileNotFoundError(
-        f"No data: C-Lock API failed and local file {LOCAL_CSV} not found. "
-        "Set CLOCK_USER and CLOCK_PASS in .env, or ensure the CSV exists."
+        f"No data: C-Lock API failed and local file {LOCAL_CSV} not found under {csv_bases}. "
+        "Set CLOCK_USER and CLOCK_PASS in .env, or copy the CSV into homework2/ or assignment_module08/."
     )
 
 
@@ -582,19 +632,34 @@ def search_emissions(df, animal_query=None, fid=None, date_from=None, date_to=No
 
 
 def main():
+    print_pipeline_section(
+        "AGENT 1 - Orchestration (retrieve data, RAG filter, build context for the LLM)",
+        "Step 1: Load GreenFeed visits from C-Lock API or local CSV.",
+        f"Step 2: RAG-style retrieval - keep only (animal, day) groups with >= {MIN_VISITS_PER_DAY} visits.",
+        "Step 3: Build rag_payload (metadata + summaries + samples) and LMM observation list.",
+        "Then AGENT 2 (OpenAI) consumes that context and may call fit_lmm_ch4_on_co2.",
+    )
+
     # --- Agent 1 (code): load, filter, build tables / JSON context ---
-    print("Loading emissions data...")
+    print("[Agent 1] Loading emissions data (API or CSV fallback)...", flush=True)
     emissions_df = load_emissions_data()
     n_all = len(emissions_df)
     n_anim_all = emissions_df["AnimalName"].nunique()
-    print(f"  Records: {n_all}, Animals: {n_anim_all}")
+    print(
+        f"[Agent 1] Raw dataset after load: {n_all} visit rows, {n_anim_all} distinct animals.",
+        flush=True,
+    )
 
+    print(
+        f"[RAG] Applying retrieval rule: min {MIN_VISITS_PER_DAY} visits per animal per calendar day...",
+        flush=True,
+    )
     rag_df, visit_meta = filter_min_visits_per_day(emissions_df, MIN_VISITS_PER_DAY)
     print(
-        f"  RAG context: >= {MIN_VISITS_PER_DAY} visits per (animal, day) — "
-        f"{visit_meta['animals_in_context']} animals, {len(rag_df)} visit rows, "
-        f"{visit_meta['animal_days_passing']} animal-days passing "
-        f"(dataset: {n_anim_all} animals, {n_all} visits)"
+        f"[RAG] Retrieved subset: {len(rag_df)} visit rows, {visit_meta['animals_in_context']} animals "
+        f"({visit_meta['animal_days_passing']} animal-days pass filter; "
+        f"full dataset was {n_all} rows / {n_anim_all} animals).",
+        flush=True,
     )
 
     _agg = {
@@ -666,6 +731,26 @@ def main():
 
     lmm_obs = build_lmm_observations(rag_df)
 
+    print(
+        f"[Agent 1] Context built: rag_payload ready; {len(lmm_obs)} visit rows with CH4+CO2 for optional LMM "
+        f"(cap {MAX_LMM_OBSERVATIONS}).",
+        flush=True,
+    )
+
+    print_pipeline_section(
+        "RAG - Retrieval metadata and samples passed into the LLM context",
+        "The retrieval block documents the filter; sample_visit_rows illustrate what entered the context window.",
+    )
+    if HOMEWORK_PIPELINE_SECTIONS:
+        print("[RAG] retrieval (JSON):", flush=True)
+        print(_trunc_text(json.dumps(visit_meta, indent=2), 1800), flush=True)
+        print("[RAG] First 3 sample_visit_rows in rag_payload:", flush=True)
+        print(json.dumps(sample_records[:3], indent=2), flush=True)
+        print(
+            "[RAG] Ad-hoc search helper: search_emissions(df, animal_query=..., fid=..., date_from=...).",
+            flush=True,
+        )
+
     role_descriptive = (
         "You are a GreenFeed emissions analyst (CH4 and CO2 in g/day). The JSON describes ONLY visits kept "
         "under a per-day rule: each row is a visit, and we only include days where that animal "
@@ -708,7 +793,11 @@ def main():
     )
 
     skip_llm = os.environ.get("LAB_RAG_SKIP_LLM", "").strip().lower() in ("1", "true", "yes")
-    print("\nSending to OpenAI (Agent 2)...", flush=True)
+    print_pipeline_section(
+        "AGENT 2 - LLM (OpenAI Chat Completions)",
+        "Uses RAG context from Agent 1; may call fit_lmm_ch4_on_co2 then write Markdown.",
+    )
+    print("\n[Agent 2] Sending request to OpenAI...", flush=True)
     if skip_llm:
         print("  LAB_RAG_SKIP_LLM: deterministic markdown only (no LMM tool call).", flush=True)
     elif use_lmm:
@@ -753,8 +842,13 @@ def main():
                 print(f"\nOpenAI request failed ({exc}). Using fallback report.", flush=True)
                 result2 = report_markdown_fallback(rag_payload)
 
+    print_pipeline_section(
+        "AGENT 2 - Model output (RAG-informed report)",
+        "Either deterministic tables (no API / LAB_RAG_SKIP_LLM) or LLM Markdown after tool use.",
+    )
+
     print("\n" + "=" * 60)
-    out_label = "Output: CH4 + CO2 summary"
+    out_label = "[Agent 2] Output: CH4 + CO2 summary"
     if use_lmm and not skip_llm:
         out_label += " (Agent 2: LMM tool + narrative)"
     elif use_lmm and skip_llm:
