@@ -1,10 +1,9 @@
 # multi-agent.py
-# C-Lock Emissions: Three-Agent Report Pipeline
-# Agent 1: Extract methane data + metadata, organize in table for Agent 2.
+# C-Lock Emissions: Two-Agent Report Pipeline
+# Agent 1: Create table (FeederID, Animal, Date, CH4) - all rows.
 # Agent 2: Analyze (feeder, top 5 visitors, CH4 stats) - Markdown report.
-# Agent 3: Extract top mitigation priorities from the report.
 # Uses OpenAI API (gpt-4o-mini).
-# SYSTEM PROMPT vs USER PROMPT:
+# SYSTEM PROMPT vs USER PROMPT (as taught in class):
 # System prompt: role="system" - defines the agent's role and behavior.
 # User prompt: role="user" - the actual task/input (e.g., data to process).
 # Both are in the messages list passed to client.chat.completions.create().
@@ -18,10 +17,9 @@ from openai import OpenAI
 
 # --- Paths ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-REPO_ROOT = os.path.dirname(os.path.dirname(SCRIPT_DIR))  # lab/ -> assignment_module06/ -> repo root
+REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 FID = "453"
-# Agent 1: keep input small to avoid timeouts (80k chars causes read timeouts)
-AGENT1_MAX_CHARS = 15000
+MAX_DATA_CHARS = 80000
 LOAD_DOTENV_PATHS = [
     os.path.join(REPO_ROOT, ".env"),
     os.path.join(REPO_ROOT, "assignment_module01", "lab_submission", ".env"),
@@ -51,6 +49,8 @@ def fetch_emissions_from_api():
         "Header": (
             "(OwnerID,)FeederID,AnimalName,RFID,StartTime,EndTime,GoodDataDuration,"
             "CO2GramsPerDay,CH4GramsPerDay,O2GramsPerDay,H2GramsPerDay,H2SGramsPerDay,"
+            "AirflowLitersPerSec,AirflowCf,WindSpeedMetersPerSec,WindDirDeg,WindCf,"
+            "WasInterrupted,InterruptingTags,TempPipeDegreesCelsius,IsPreliminary,RunTime"
         )
     }
     req_obj = request.Request(URL, data=bytes("token=" + TOK, "ascii"), headers=Headers)
@@ -79,7 +79,33 @@ def parse_csv_to_df(csv_raw: str) -> pd.DataFrame:
     return df.dropna(subset=["StartTime", "CH4GramsPerDay"])
 
 
-# 2. Three-Agent Pipeline (OpenAI)
+def build_table_from_df(df: pd.DataFrame, max_rows: int | None = None) -> str:
+    # Build a markdown table with FeederID, Animal, Date, CH4.
+    # Keeps ALL rows by default. If max_rows is set, only the first max_rows are included.
+    cols = ["FeederID", "AnimalName", "Date", "CH4GramsPerDay"]
+    for c in cols:
+        if c not in df.columns:
+            raise ValueError(f"Missing column: {c}")
+    out = df[cols].copy()
+    if max_rows is not None:
+        out = out.head(max_rows)
+    out = out.rename(columns={"AnimalName": "Animal", "CH4GramsPerDay": "CH4"})
+    try:
+        return out.to_markdown(index=False)
+    except ImportError:
+        # Fallback if tabulate not installed: pip install tabulate
+        h = "| " + " | ".join(out.columns) + " |"
+        sep = "| " + " | ".join("---" for _ in out.columns) + " |"
+        rows = ["| " + " | ".join(str(v) for v in r) + " |" for _, r in out.iterrows()]
+        return "\n".join([h, sep] + rows)
+
+
+# 2. Two-Agent Pipeline (OpenAI)
+#
+# SYSTEM PROMPT vs USER PROMPT:
+# - "system" role = SYSTEM PROMPT: defines the agent's role, behavior, and instructions.
+# - "user" role = USER PROMPT: the actual task/input (e.g., the data to process).
+# Both are in the "messages" array passed to the API.
 
 
 def _strip_code_block(text: str) -> str:
@@ -99,19 +125,20 @@ def _get_client() -> OpenAI:
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise ValueError("OPENAI_API_KEY must be set in .env")
-    return OpenAI(api_key=api_key, timeout=180)
+    return OpenAI(api_key=api_key, timeout=90)
 
 
 def agent_1_create_table(csv_data: str, client: OpenAI) -> str:
-    """Agent 1: Extract methane data and metadata, organize in table for Agent 2."""
-    data = csv_data[:AGENT1_MAX_CHARS] + ("\n... [truncated]" if len(csv_data) > AGENT1_MAX_CHARS else "")
+    """Agent 1: Looks at CSV and creates a markdown table with FeederID, Animal, Date, CH4."""
+    # Keep input small so the LLM responds quickly (80k chars causes timeouts)
+    data = csv_data[:MAX_DATA_CHARS] + ("\n... [truncated]" if len(csv_data) > MAX_DATA_CHARS else "")
+    # SYSTEM PROMPT: defines the agent's role and behavior
     system_prompt = (
-        "You are a methane data analyst. Extract methane data and relevant metadata related to methane "
-        "and organize the data in a table that can be used by Agent 2 for analysis. "
-        "Include FeederID, Animal, Date, CH4 and any other methane-relevant columns. "
-        "Show the first 50 rows. Output ONLY the markdown table, no code fences."
+        "Create a markdown table from the CSV with headers: FeederID, Animal, Date, CH4. "
+        "Show only the first 50 rows. Output ONLY the markdown table, no code fences."
     )
-    user_prompt = f"Extract and organize methane data from this CSV:\n{data}"
+    # USER PROMPT: the actual input (the data)
+    user_prompt = f"Create the table from this csv\n{data}"
     r = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -128,6 +155,7 @@ def agent_2_analyze(table: str, client: OpenAI) -> str:
     1) Which feeder it is
     2) Top 5 animals by visit count
     3) CH4 emission descriptive statistics and variation"""
+    # SYSTEM PROMPT: defines the agent's role and behavior
     system_prompt = (
         "You are an emissions data analyst. Analyze the feeder visit table and write a Markdown report with:\n"
         "1) **Feeder**: Which feeder the data is from.\n"
@@ -135,6 +163,7 @@ def agent_2_analyze(table: str, client: OpenAI) -> str:
         "3) **CH4 emissions**: Descriptive statistics (mean, median, min, max, std) and whether there is big variation. Summarize the emission patterns.\n"
         "Use clear headers (# and ##), bullet points, and tables where helpful. Output ONLY raw Markdown, no code fences."
     )
+    # USER PROMPT: the actual input (the table)
     user_prompt = f"Analyze this table and write the report:\n\n{table}"
     r = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -147,29 +176,8 @@ def agent_2_analyze(table: str, client: OpenAI) -> str:
     return _strip_code_block(r.choices[0].message.content.strip())
 
 
-def agent_3_mitigation(report_md: str, client: OpenAI) -> str:
-    """Agent 3: Extract top mitigation priorities from the analysis report."""
-    system_prompt = (
-        "You are a methane mitigation advisor for livestock operations. Given an emissions analysis report, "
-        "extract the most important information for reducing methane emissions. Produce a concise Markdown summary with:\n"
-        "1) **Top 3–5 mitigation priorities** (e.g., high emitters to monitor, unusual patterns)\n"
-        "2) **Actionable recommendations** (e.g., which animals to focus on, what to investigate)\n"
-        "3) **Key metrics to track** (e.g., mean CH4, variation, visit patterns)\n"
-        "Output ONLY raw Markdown, no code fences. Keep it brief and actionable."
-    )
-    user_prompt = f"Extract mitigation priorities from this report:\n\n{report_md}"
-    r = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        temperature=0.3,
-    )
-    return _strip_code_block(r.choices[0].message.content.strip())
-
-
-# Main
+# 3. Main
+#
 if __name__ == "__main__":
     print("Fetching data from C-Lock API...")
     csv_raw, df = fetch_emissions_from_api()
@@ -178,22 +186,15 @@ if __name__ == "__main__":
         exit(1)
     print(f"Fetched {len(df)} records, {len(df['AnimalName'].unique())} animals")
 
-    client = _get_client()
-
-    # Agent 1: Extract methane data, organize in table
-    print("Agent 1: Extracting methane data and organizing table...")
-    table = agent_1_create_table(csv_raw, client)
-    print("=== Agent 1: Table ===")
+    # Agent 1: Build table with Python (first 50 rows)
+    print("Agent 1: Building table (FeederID, Animal, Date, CH4) - first 50 rows...")
+    table = build_table_from_df(df, max_rows=50)
+    print("=== Agent 1: Table (FeederID, Animal, Date, CH4) ===")
     print(table)
 
-    # Agent 2: Analyze table -> Markdown report
-    print("Agent 2: Analyzing table...")
+    # Agent 2: Analyze table and produce Markdown report
+    print("Running Agent 2 (analyze table -> Markdown report)...")
+    client = _get_client()
     report_md = agent_2_analyze(table, client)
-    print("=== Agent 2: Report ===")
+    print("=== Agent 2: Markdown Report ===")
     print(report_md)
-
-    # Agent 3: Mitigation priorities
-    print("Agent 3: Extracting mitigation priorities...")
-    priorities = agent_3_mitigation(report_md, client)
-    print("=== Agent 3: Mitigation Priorities ===")
-    print(priorities)

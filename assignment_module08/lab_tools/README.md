@@ -1,0 +1,5 @@
+# Lab tools (`lab_tool_function.py`)
+
+The custom tool **`fit_lmm_ch4_on_co2`** is defined for OpenAI as **`TOOL_LMM_CH4_CO2`** (function name, description, and JSON parameter schema) and implemented in Python with **statsmodels `MixedLM`**: **CH4 (g/day) ~ CO2 (g/day)** with a **random intercept for animal**, returning a text summary for the model to read. **Agent 1** is code-only: it loads emissions data, applies the visit-per-day filter, and prepares summary JSON plus a server-side list of observations so the LLM does not have to paste thousands of rows. **Agent 2** is the chat model: it calls the tool with `{}`, the code runs the LMM on the preloaded rows, and a second completion turns the tool output into a short **Markdown** report.
+
+**Run:** `py lab_tool_function.py` from this folder; set **`OPENAI_API_KEY`** in the repo `.env`; install with **`py -m pip install -r requirements.txt`**. From `assignment_module08` root, use **`py -m pip install -r lab_tools/requirements.txt`**. Set **`LAB_RAG_SKIP_LLM=1`** to skip the API and use the deterministic tables only.

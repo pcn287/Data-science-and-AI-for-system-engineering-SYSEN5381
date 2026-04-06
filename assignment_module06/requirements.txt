@@ -1,0 +1,5 @@
+# Module 6: Multi-Agent Report Pipeline (C-Lock Emissions)
+pandas
+python-dotenv
+openai
+tabulate

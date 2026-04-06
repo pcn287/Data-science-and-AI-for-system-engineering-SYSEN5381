@@ -1,0 +1,6 @@
+# lab_tools — lab_tool_function.py (OpenAI + statsmodels); assignment_module08 root scripts may use ollama + pandas
+ollama>=0.3.0
+pandas>=2.0.0
+openai>=1.0.0
+python-dotenv>=1.0.0
+statsmodels>=0.14.0

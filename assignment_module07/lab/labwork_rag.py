@@ -5,7 +5,7 @@
 
 # This script demonstrates a RAG workflow that:
 # 1. Retrieves emissions data from C-Lock API (or local CSV fallback)
-# 2. Filters to animals in the top half by visit count (stronger, smaller context)
+# 2. Keeps only visit rows on (animal, calendar day) groups with >= MIN_VISITS_PER_DAY visits
 # 3. Sends compact JSON (per-animal stats + small row sample) to OpenAI for a Markdown report
 
 # 0. SETUP ###################################
@@ -36,6 +36,10 @@ LOCAL_CSV = "emissions_visits_fid453_20260204_162120.csv"
 # Default matches other SYSEN 5381 scripts; override with env OPENAI_MODEL.
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
 MAX_COMPLETION_TOKENS = 1500
+
+# RAG retrieval filter: keep a row only if that animal had at least this many
+# feeder visits on the same calendar day (each CSV row = one visit).
+MIN_VISITS_PER_DAY = 3
 
 LOAD_DOTENV_PATHS = [
     os.path.join(REPO_ROOT, ".env"),
@@ -85,7 +89,7 @@ def report_markdown_fallback(payload):
     st = s["CH4_descriptive_stats_this_subset"]
     ref = s["dataset_totals_for_reference"]
     lines = [
-        "# Methane report (frequent visitors — deterministic, no LLM)",
+        "# Methane report (>= min visits per animal per day — deterministic, no LLM)",
         "",
         "## Scope",
         f"- **Visits in context:** {s['records_in_context']} ({s['unique_animals_in_context']} animals)",
@@ -103,11 +107,11 @@ def report_markdown_fallback(payload):
         f"| 50% | {st.get('50%', float('nan')):.2f} |",
         f"| max | {st.get('max', float('nan')):.2f} |",
         "",
-        "## By animal (top half by visits)",
+        "## By animal (days with >= min visits per day)",
         "| Animal | Visits | Mean CH4 | Min | Max |",
         "|--------|--------|----------|-----|-----|",
     ]
-    for row in payload.get("by_animal_top_half", []):
+    for row in payload.get("by_animal_filtered", []):
         lines.append(
             f"| {row['AnimalName']} | {row['visits']} | {row['mean_ch4_gpd']} | "
             f"{row['min_ch4_gpd']} | {row['max_ch4_gpd']} |"
@@ -116,7 +120,8 @@ def report_markdown_fallback(payload):
         [
             "",
             "## Interpretation",
-            "- Summary is limited to the most frequent visitors (retrieval filter). "
+            "- Summary is limited to visit days with enough trips to the feeder "
+            "(retrieval filter: min visits per animal per day). "
             "Compare mean and spread to spot high-emitting animals among that group.",
         ]
     )
@@ -207,53 +212,63 @@ def load_emissions_data():
     )
 
 
-# 2. VISIT-RANK FILTER (stronger retrieval / smaller context) ##################
+# 2. VISIT-PER-DAY FILTER (retrieval / smaller context) ##################
 
 
-def filter_top_half_animals_by_visits(df: pd.DataFrame):
+def filter_min_visits_per_day(df: pd.DataFrame, min_visits: int = MIN_VISITS_PER_DAY):
     """
-    Rank animals by visit count (most visits first). Keep only rows for animals
-    in the first half of that ranking (top 50% by number of animals).
+    Keep only visit rows where that animal had at least `min_visits` visits to the
+    feeder on the same calendar day. Each row in the C-Lock export is one visit.
 
     Returns
     -------
     filtered_df : pd.DataFrame
-        Subset of df for those animals only.
+        Subset of df: rows belonging to (AnimalName, Date) groups with enough visits.
     meta : dict
-        Ranking metadata for the RAG payload (transparent to the LLM).
+        Metadata for the RAG payload (transparent to the LLM).
     """
-    if df.empty or "AnimalName" not in df.columns:
-        return df.copy(), {
-            "filter": "top_half_by_visit_count",
-            "total_animals_in_dataset": 0,
-            "animals_in_context": 0,
-            "visit_counts_ranked": [],
-        }
-    vc = (
-        df.groupby("AnimalName", observed=True)
+    empty_meta = {
+        "filter": "min_visits_per_calendar_day",
+        "min_visits_per_day": min_visits,
+        "total_animals_in_dataset": 0,
+        "animals_in_context": 0,
+        "animal_days_passing": 0,
+        "rows_before_filter": 0,
+        "rows_after_filter": 0,
+        "daily_counts_sample": [],
+    }
+    if df.empty or "AnimalName" not in df.columns or "Date" not in df.columns:
+        return df.copy(), empty_meta
+
+    counts = (
+        df.groupby(["AnimalName", "Date"], observed=True)
         .size()
-        .reset_index(name="visit_count")
-        .sort_values("visit_count", ascending=False)
-        .reset_index(drop=True)
+        .reset_index(name="visits_that_day")
     )
-    n_animals = len(vc)
-    if n_animals == 0:
+    passing = counts[counts["visits_that_day"] >= min_visits]
+    if passing.empty:
         return df.iloc[0:0].copy(), {
-            "filter": "top_half_by_visit_count",
-            "total_animals_in_dataset": 0,
-            "animals_in_context": 0,
-            "visit_counts_ranked": [],
+            **empty_meta,
+            "total_animals_in_dataset": int(df["AnimalName"].nunique()),
+            "rows_before_filter": int(len(df)),
         }
-    n_keep = max(1, n_animals // 2)
-    kept = set(vc["AnimalName"].iloc[:n_keep])
-    filtered = df[df["AnimalName"].isin(kept)].copy()
+
+    filtered = df.merge(
+        passing[["AnimalName", "Date"]],
+        on=["AnimalName", "Date"],
+        how="inner",
+    )
     meta = {
-        "filter": "top_half_by_visit_count",
-        "total_animals_in_dataset": int(n_animals),
-        "animals_in_context": int(n_keep),
-        "visit_counts_ranked": vc.head(n_keep)[["AnimalName", "visit_count"]].to_dict(
-            orient="records"
-        ),
+        "filter": "min_visits_per_calendar_day",
+        "min_visits_per_day": min_visits,
+        "total_animals_in_dataset": int(df["AnimalName"].nunique()),
+        "animals_in_context": int(filtered["AnimalName"].nunique()),
+        "animal_days_passing": int(len(passing)),
+        "rows_before_filter": int(len(df)),
+        "rows_after_filter": int(len(filtered)),
+        "daily_counts_sample": passing.sort_values(
+            "visits_that_day", ascending=False
+        ).head(30)[["AnimalName", "Date", "visits_that_day"]].to_dict(orient="records"),
     }
     return filtered, meta
 
@@ -314,11 +329,13 @@ n_all = len(emissions_df)
 n_anim_all = emissions_df["AnimalName"].nunique()
 print(f"  Records: {n_all}, Animals: {n_anim_all}")
 
-# Stronger filter: only animals in the top half by visit frequency (then analyze that subset)
-rag_df, visit_meta = filter_top_half_animals_by_visits(emissions_df)
+# Retrieval filter: only rows on days when that animal visited >= MIN_VISITS_PER_DAY times
+rag_df, visit_meta = filter_min_visits_per_day(emissions_df, MIN_VISITS_PER_DAY)
 print(
-    f"  RAG context: top half by visits — {visit_meta['animals_in_context']} animals, "
-    f"{len(rag_df)} visits (of {n_anim_all} animals, {n_all} visits total)"
+    f"  RAG context: >= {MIN_VISITS_PER_DAY} visits per (animal, day) — "
+    f"{visit_meta['animals_in_context']} animals, {len(rag_df)} visit rows, "
+    f"{visit_meta['animal_days_passing']} animal-days passing "
+    f"(dataset: {n_anim_all} animals, {n_all} visits)"
 )
 
 # Compact per-animal stats for the LLM (no need to send hundreds of raw rows)
@@ -349,8 +366,8 @@ sample_records = rag_df[cols].head(MAX_SAMPLE).to_dict(orient="records")
 
 rag_payload = {
     "context_scope": (
-        "Only frequent visitors: animals ranked in the top half by visit count. "
-        "Do not generalize to animals not listed."
+        f"Only visit rows on calendar days where that animal had at least "
+        f"{MIN_VISITS_PER_DAY} feeder visits that day. Sparse days are excluded."
     ),
     "retrieval": visit_meta,
     "summary": {
@@ -364,20 +381,21 @@ rag_payload = {
         "date_range": [str(rag_df["Date"].min()), str(rag_df["Date"].max())],
         "CH4_descriptive_stats_this_subset": stats_dict,
     },
-    "by_animal_top_half": per_animal_rounded.to_dict(orient="records"),
+    "by_animal_filtered": per_animal_rounded.to_dict(orient="records"),
     "sample_visit_rows": sample_records,
 }
 result1_json = json.dumps(rag_payload, indent=2)
 
 # Task 2: System prompt — scoped to the filtered subset
 role = (
-    "You are a methane emissions data analyst. The JSON describes ONLY GreenFeed visits from "
-    "the most frequent visitors (top half of animals by visit count). "
+    "You are a methane emissions data analyst. The JSON describes ONLY GreenFeed visits kept "
+    "under a per-day rule: each row is a visit, and we only include days where that animal "
+    f"had at least {MIN_VISITS_PER_DAY} visits that calendar day (see context_scope and retrieval). "
     "Produce short Markdown:\n"
-    "1) **Scope**: State how many animals and visits are in context vs dataset totals.\n"
+    "1) **Scope**: State how many animals, visit rows, and animal-days are in context vs dataset totals.\n"
     "2) **CH4 stats**: One small table (mean, median, min, max, std) for this subset.\n"
-    "3) **By animal**: Brief bullets or a tiny table from by_animal_top_half (visits + mean CH4).\n"
-    "4) **Interpretation**: 2 sentences on patterns among these frequent visitors only.\n"
+    "3) **By animal**: Brief bullets or a tiny table from by_animal_filtered (visits + mean CH4).\n"
+    "4) **Interpretation**: 2 sentences on patterns in this high-visit-day subset only.\n"
     "Output ONLY raw Markdown, no code fences."
 )
 

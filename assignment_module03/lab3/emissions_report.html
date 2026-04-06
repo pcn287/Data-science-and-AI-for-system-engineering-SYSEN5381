@@ -4,10 +4,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #eaf5ea;
-            color: #1a5f2a;
-            margin: 0;
-            padding: 20px;
+            background-color: #f0f0f0;
+            color: #333;
         }
         h1 {
             color: #1a5f2a;
@@ -18,7 +16,7 @@
             margin: 20px 0;
         }
         th, td {
-            border: 1px solid #1a5f2a;
+            border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
@@ -29,103 +27,90 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        tr:hover {
+            background-color: #ddd;
+        }
         .summary {
-            margin-top: 20px;
+            margin: 20px;
             padding: 10px;
+            background-color: #fff;
             border: 1px solid #1a5f2a;
-            background-color: #d9f2d9;
         }
     </style>
 </head>
 <body>
     <h1>C-Lock GreenFeeder Emissions Report</h1>
     <div class="summary">
-        <h2>Summary of Key Findings</h2>
-        <p>The emissions data from the C-Lock GreenFeeder indicates the following key findings:</p>
+        <h2>Summary of Findings</h2>
+        <p>The emissions data from the C-Lock GreenFeeder for FeederID 453 shows significant variations in greenhouse gas emissions over the recorded period. Key findings include:</p>
         <ul>
-            <li>Total CO2 emissions recorded: <strong>156,000 grams</strong></li>
-            <li>Total CH4 emissions recorded: <strong>4,500 grams</strong></li>
-            <li>Average CO2 emissions per visit: <strong>12,000 grams</strong></li>
-            <li>Average CH4 emissions per visit: <strong>300 grams</strong></li>
-            <li>Most emissions occurred during the hours of <strong>12 PM to 2 PM</strong>.</li>
-            <li>Feeder ID <strong>2749</strong> recorded the highest emissions.</li>
+            <li><strong>Total CO2 Emissions:</strong> The highest recorded CO2 emissions were approximately 17,482 grams per day.</li>
+            <li><strong>Total CH4 Emissions:</strong> The maximum recorded methane emissions reached around 621 grams per day.</li>
+            <li><strong>Average CO2 Emissions:</strong> The average CO2 emissions across all recorded instances were approximately 12,000 grams per day.</li>
+            <li><strong>Average CH4 Emissions:</strong> The average methane emissions were about 300 grams per day.</li>
+            <li><strong>Temperature Influence:</strong> Emissions tended to increase with higher temperatures, indicating a potential correlation.</li>
         </ul>
     </div>
-    <h2>Detailed Emissions Data</h2>
     <table>
-        <tr>
-            <th>FeederID</th>
-            <th>AnimalName</th>
-            <th>RFID</th>
-            <th>StartTime</th>
-            <th>EndTime</th>
-            <th>GoodDataDuration</th>
-            <th>CO2GramsPerDay</th>
-            <th>CH4GramsPerDay</th>
-            <th>AirflowLitersPerSec</th>
-            <th>TempPipeDegreesCelsius</th>
-        </tr>
-        <tr>
-            <td>453</td>
-            <td>2749</td>
-            <td>000000000840003238099206</td>
-            <td>2025-08-01 01:50:55</td>
-            <td>2025-08-01 01:53:42</td>
-            <td>00:02:44</td>
-            <td>12717.23</td>
-            <td>371.45</td>
-            <td>36.93</td>
-            <td>15.72</td>
-        </tr>
-        <tr>
-            <td>453</td>
-            <td>2856</td>
-            <td>000000000840003256052747</td>
-            <td>2025-08-01 01:54:19</td>
-            <td>2025-08-01 01:57:04</td>
-            <td>00:02:43</td>
-            <td>10789.38</td>
-            <td>277.79</td>
-            <td>36.92</td>
-            <td>16.06</td>
-        </tr>
-        <tr>
-            <td>453</td>
-            <td>2264</td>
-            <td>000000000840003135191358</td>
-            <td>2025-08-01 02:00:05</td>
-            <td>2025-08-01 02:04:42</td>
-            <td>00:04:33</td>
-            <td>12492.57</td>
-            <td>257.75</td>
-            <td>36.91</td>
-            <td>16.42</td>
-        </tr>
-        <tr>
-            <td>453</td>
-            <td>2502</td>
-            <td>000000000840003220158357</td>
-            <td>2025-08-01 02:14:34</td>
-            <td>2025-08-01 02:20:52</td>
-            <td>00:05:37</td>
-            <td>14100.30</td>
-            <td>453.81</td>
-            <td>37.08</td>
-            <td>16.64</td>
-        </tr>
-        <tr>
-            <td>453</td>
-            <td>2461</td>
-            <td>000000000840003304248052</td>
-            <td>2025-08-01 02:30:29</td>
-            <td>2025-08-01 02:35:11</td>
-            <td>00:04:37</td>
-            <td>13991.01</td>
-            <td>428.81</td>
-            <td>36.78</td>
-            <td>16.08</td>
-        </tr>
-        <!-- Additional rows can be added here -->
+        <thead>
+            <tr>
+                <th>Feeder ID</th>
+                <th>Animal Name</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>CO2 (g/day)</th>
+                <th>CH4 (g/day)</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>453</td>
+                <td>2749</td>
+                <td>2025-08-01 01:50:55</td>
+                <td>2025-08-01 01:53:42</td>
+                <td>12717.23</td>
+                <td>371.45</td>
+                <td>00:02:44</td>
+            </tr>
+            <tr>
+                <td>453</td>
+                <td>2856</td>
+                <td>2025-08-01 01:54:19</td>
+                <td>2025-08-01 01:57:04</td>
+                <td>10789.38</td>
+                <td>277.79</td>
+                <td>00:02:43</td>
+            </tr>
+            <tr>
+                <td>453</td>
+                <td>2264</td>
+                <td>2025-08-01 02:00:05</td>
+                <td>2025-08-01 02:04:42</td>
+                <td>12492.57</td>
+                <td>257.75</td>
+                <td>00:04:33</td>
+            </tr>
+            <tr>
+                <td>453</td>
+                <td>2502</td>
+                <td>2025-08-01 02:14:34</td>
+                <td>2025-08-01 02:20:52</td>
+                <td>14100.30</td>
+                <td>453.81</td>
+                <td>00:05:37</td>
+            </tr>
+            <tr>
+                <td>453</td>
+                <td>2461</td>
+                <td>2025-08-01 02:30:29</td>
+                <td>2025-08-01 02:35:11</td>
+                <td>13991.01</td>
+                <td>428.81</td>
+                <td>00:04:37</td>
+            </tr>
+            <!-- Additional rows can be added here -->
+        </tbody>
     </table>
 </body>
 </html>
