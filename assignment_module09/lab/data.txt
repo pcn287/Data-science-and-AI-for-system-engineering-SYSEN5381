@@ -1,0 +1,5 @@
+**Scope**: The analysis includes 710 visits from 43 animals, filtered to include only days where each animal had at least 3 visits.
+
+**Model**: The model is specified as CH4 ~ CO2 with a random intercept for each animal. The fixed effects include an intercept (not statistically significant) and a CO2 slope of 0.027 (p < 0.001). The reported random-effect variance for the animal groups is 0.000.
+
+**Interpretation**: The positive slope for CO2 suggests a correlation with CH4 emissions; however, this does not imply causation. Given the structure of the data, animals are treated as repeated measures, which may influence the relationship observed.

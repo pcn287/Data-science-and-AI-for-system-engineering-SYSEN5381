@@ -1,0 +1,7 @@
+{
+  "formality": 2.5,
+  "clarity": 3,
+  "succinctness": 3,
+  "relevance": 2,
+  "notes": "Replace null with integers 1-5 after manual rubric review of data.txt (scientific-publication framing). Save before running text_quality_control_lab.py."
+}
