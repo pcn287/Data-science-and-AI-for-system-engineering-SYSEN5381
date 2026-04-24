@@ -1,0 +1,1 @@
+END_BRIEF is the model’s signal that the disaster situational brief is finished and ready—that it is done revising and the server may end the agent turn loop (subject to any minimum rounds the server requires).
