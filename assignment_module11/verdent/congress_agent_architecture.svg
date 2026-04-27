@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1050" viewBox="0 0 1400 1050">
+  <defs>
+    <style>
+      .box { fill: #f8fafc; stroke: #334155; stroke-width: 2; rx: 12; }
+      .store { fill: #eef2ff; stroke: #3730a3; stroke-width: 2; rx: 12; }
+      .control { fill: #fff7ed; stroke: #c2410c; stroke-width: 2; rx: 12; }
+      .human { fill: #ecfdf5; stroke: #047857; stroke-width: 2; rx: 12; }
+      .title { font-family: Arial, sans-serif; font-size: 28px; font-weight: 700; fill: #0f172a; }
+      .text { font-family: Arial, sans-serif; font-size: 18px; fill: #0f172a; }
+      .small { font-family: Arial, sans-serif; font-size: 15px; fill: #334155; }
+      .arrow { stroke: #475569; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <text x="700" y="45" text-anchor="middle" class="title">Congressional Plain Language Translator Architecture</text>
+
+  <rect x="70" y="90" width="270" height="90" class="box"/>
+  <text x="205" y="125" text-anchor="middle" class="text">Document Sources</text>
+  <text x="205" y="153" text-anchor="middle" class="small">PDFs, emails, legislation,</text>
+  <text x="205" y="173" text-anchor="middle" class="small">regulations, letters, memos</text>
+
+  <rect x="420" y="90" width="270" height="90" class="box"/>
+  <text x="555" y="125" text-anchor="middle" class="text">Secure Ingestion Gateway</text>
+  <text x="555" y="153" text-anchor="middle" class="small">virus scan, file validation,</text>
+  <text x="555" y="173" text-anchor="middle" class="small">source metadata</text>
+
+  <rect x="770" y="90" width="270" height="90" class="box"/>
+  <text x="905" y="125" text-anchor="middle" class="text">OCR + Text Extraction</text>
+  <text x="905" y="153" text-anchor="middle" class="small">preserve page, section,</text>
+  <text x="905" y="173" text-anchor="middle" class="small">sender, date, source</text>
+
+  <rect x="1070" y="90" width="270" height="90" class="box"/>
+  <text x="1205" y="125" text-anchor="middle" class="text">Classifier</text>
+  <text x="1205" y="153" text-anchor="middle" class="small">document type, sensitivity,</text>
+  <text x="1205" y="173" text-anchor="middle" class="small">office ownership</text>
+
+  <rect x="565" y="245" width="270" height="95" class="box"/>
+  <text x="700" y="280" text-anchor="middle" class="text">Chunker + Summarizer</text>
+  <text x="700" y="308" text-anchor="middle" class="small">section chunks, paragraph chunks,</text>
+  <text x="700" y="328" text-anchor="middle" class="small">short summaries</text>
+
+  <rect x="120" y="410" width="270" height="95" class="box"/>
+  <text x="255" y="445" text-anchor="middle" class="text">Embedding Service</text>
+  <text x="255" y="473" text-anchor="middle" class="small">approved text embedding</text>
+  <text x="255" y="493" text-anchor="middle" class="small">model</text>
+
+  <rect x="565" y="410" width="270" height="95" class="store"/>
+  <text x="700" y="445" text-anchor="middle" class="text">Raw Document Store</text>
+  <text x="700" y="473" text-anchor="middle" class="small">encrypted object storage</text>
+
+  <rect x="1010" y="410" width="270" height="95" class="store"/>
+  <text x="1145" y="445" text-anchor="middle" class="text">Metadata Store</text>
+  <text x="1145" y="473" text-anchor="middle" class="small">Postgres</text>
+
+  <rect x="120" y="590" width="270" height="95" class="store"/>
+  <text x="255" y="625" text-anchor="middle" class="text">Vector Database</text>
+  <text x="255" y="653" text-anchor="middle" class="small">Postgres + pgvector</text>
+
+  <rect x="565" y="590" width="270" height="110" class="control"/>
+  <text x="700" y="625" text-anchor="middle" class="text">Access Control Layer</text>
+  <text x="700" y="653" text-anchor="middle" class="small">RLS by user role, office,</text>
+  <text x="700" y="673" text-anchor="middle" class="small">clearance, need-to-know</text>
+
+  <rect x="1010" y="590" width="270" height="95" class="box"/>
+  <text x="1145" y="625" text-anchor="middle" class="text">Retriever</text>
+  <text x="1145" y="653" text-anchor="middle" class="small">top-k authorized chunks</text>
+  <text x="1145" y="673" text-anchor="middle" class="small">and summaries only</text>
+
+  <rect x="1010" y="760" width="270" height="95" class="box"/>
+  <text x="1145" y="795" text-anchor="middle" class="text">Translator Agent</text>
+  <text x="1145" y="823" text-anchor="middle" class="small">no direct raw-store access</text>
+
+  <rect x="565" y="760" width="270" height="95" class="box"/>
+  <text x="700" y="795" text-anchor="middle" class="text">Response Builder</text>
+  <text x="700" y="823" text-anchor="middle" class="small">translation, warnings,</text>
+  <text x="700" y="843" text-anchor="middle" class="small">citations, confidence</text>
+
+  <rect x="120" y="760" width="270" height="95" class="human"/>
+  <text x="255" y="795" text-anchor="middle" class="text">Human Staff Review</text>
+  <text x="255" y="823" text-anchor="middle" class="small">required for public or</text>
+  <text x="255" y="843" text-anchor="middle" class="small">sensitive outputs</text>
+
+  <rect x="565" y="920" width="270" height="95" class="box"/>
+  <text x="700" y="955" text-anchor="middle" class="text">Staff / Constituent Interface</text>
+  <text x="700" y="983" text-anchor="middle" class="small">web app, API, approved chat</text>
+
+  <rect x="1010" y="920" width="270" height="95" class="store"/>
+  <text x="1145" y="955" text-anchor="middle" class="text">Audit Log</text>
+  <text x="1145" y="983" text-anchor="middle" class="small">user, query, role, document IDs</text>
+
+  <path d="M340 135 H420" class="arrow"/>
+  <path d="M690 135 H770" class="arrow"/>
+  <path d="M1040 135 H1070" class="arrow"/>
+  <path d="M1205 180 V292 H835" class="arrow"/>
+  <path d="M565 292 H255 V410" class="arrow"/>
+  <path d="M700 340 V410" class="arrow"/>
+  <path d="M835 292 H1145 V410" class="arrow"/>
+  <path d="M255 505 V590" class="arrow"/>
+  <path d="M390 637 H565" class="arrow"/>
+  <path d="M700 505 V590" class="arrow"/>
+  <path d="M1145 505 V645 H835" class="arrow"/>
+  <path d="M835 645 H1010" class="arrow"/>
+  <path d="M1145 685 V760" class="arrow"/>
+  <path d="M1010 807 H835" class="arrow"/>
+  <path d="M565 807 H390" class="arrow"/>
+  <path d="M700 855 V920" class="arrow"/>
+  <path d="M835 967 H1010" class="arrow"/>
+  <path d="M1145 920 V880 H1210 V685" class="arrow"/>
+</svg>
