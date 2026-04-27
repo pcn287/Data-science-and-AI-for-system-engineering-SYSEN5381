@@ -61,20 +61,20 @@ CONFIDENCE:
 
 ```mermaid
 flowchart TD
-    A[Document Sources<br>Congress.gov bills, regulations, PDFs, emails, constituent letters] --> B[Ingestion Pipeline]
-    B --> C[OCR + Text Cleaning<br>Preserve page, section, and source metadata]
-    C --> D[Chunker + Summarizer<br>Section chunks + short summaries]
-    D --> E[Embedding Model<br>text-embedding model approved for government use]
-    D --> F[(Raw Document Store<br>Encrypted object storage)]
-    E --> G[(Vector Database<br>Supabase Postgres + pgvector)]
-    F --> H[(Metadata Database<br>Postgres)]
-    G --> I{Access Control<br>RLS by clearance level}
+    A[Document Sources<br/>Bills, regs, PDFs,<br/>emails, letters] --> B[Ingestion Pipeline]
+    B --> C[OCR + Cleaning<br/>Keep page, section,<br/>and source metadata]
+    C --> D[Chunk + Summarize<br/>Section chunks +<br/>short summaries]
+    D --> E[Embedding Model<br/>Gov-approved text embeddings]
+    D --> F[(Raw Doc Store<br/>Encrypted object storage)]
+    E --> G[(Vector DB<br/>Supabase Postgres + pgvector)]
+    F --> H[(Metadata DB<br/>Postgres)]
+    G --> I{Access Control<br/>RLS by clearance}
     H --> I
-    I --> J[Retriever<br>Top-k chunks filtered by user role]
+    I --> J[Retriever<br/>Top-k chunks by role]
     J --> K[Plain Language Translator Agent]
-    K --> L[Response Builder<br>Translation, nuance warnings, sources, confidence]
-    L --> M[Staff / Constituent Interface<br>Web app, API, or approved chat tool]
-    N[Audit Log<br>query, user role, document IDs, citations] --> H
+    K --> L[Response Builder<br/>Translation, nuance warnings,<br/>sources, confidence]
+    L --> M[User Interface<br/>Web app, API, approved chat]
+    N[Audit Log<br/>Query, role, doc IDs,<br/>citations] --> H
     M --> N
 ```
 
