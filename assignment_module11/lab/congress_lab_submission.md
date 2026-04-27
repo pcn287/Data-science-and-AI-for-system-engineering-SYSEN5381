@@ -61,20 +61,20 @@ CONFIDENCE:
 
 ```mermaid
 flowchart TD
-    A[Document Sources<br/>Bills, regs, PDFs,<br/>emails, letters] --> B[Ingestion Pipeline]
-    B --> C[OCR + Cleaning<br/>Keep page, section,<br/>and source metadata]
-    C --> D[Chunk + Summarize<br/>Section chunks +<br/>short summaries]
-    D --> E[Embedding Model<br/>Gov-approved text embeddings]
-    D --> F[(Raw Doc Store<br/>Encrypted object storage)]
-    E --> G[(Vector DB<br/>Supabase Postgres + pgvector)]
-    F --> H[(Metadata DB<br/>Postgres)]
-    G --> I{Access Control<br/>RLS by clearance}
+    A[Doc Sources] --> B[Ingest]
+    B --> C[OCR + Clean]
+    C --> D[Chunk + Summarize]
+    D --> E[Embeddings]
+    D --> F[(Raw Docs)]
+    E --> G[(Vector DB)]
+    F --> H[(Metadata DB)]
+    G --> I{Access Control}
     H --> I
-    I --> J[Retriever<br/>Top-k chunks by role]
-    J --> K[Plain Language Translator Agent]
-    K --> L[Response Builder<br/>Translation, nuance warnings,<br/>sources, confidence]
-    L --> M[User Interface<br/>Web app, API, approved chat]
-    N[Audit Log<br/>Query, role, doc IDs,<br/>citations] --> H
+    I --> J[Retriever]
+    J --> K[Translator Agent]
+    K --> L[Response Builder]
+    L --> M[User Interface]
+    N[Audit Log] --> H
     M --> N
 ```
 

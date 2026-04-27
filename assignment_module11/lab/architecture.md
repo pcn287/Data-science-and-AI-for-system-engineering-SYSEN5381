@@ -4,20 +4,20 @@
 
 ```mermaid
 flowchart TD
-    A[Document Sources<br>Congress.gov bills, regulations, PDFs, emails, constituent letters] --> B[Ingestion Pipeline]
-    B --> C[OCR + Text Cleaning<br>Preserve page, section, and source metadata]
-    C --> D[Chunker + Summarizer<br>Section chunks + short summaries]
-    D --> E[Embedding Model<br>text-embedding model approved for government use]
-    D --> F[(Raw Document Store<br>Encrypted object storage)]
-    E --> G[(Vector Database<br>Supabase Postgres + pgvector)]
-    F --> H[(Metadata Database<br>Postgres)]
-    G --> I{Access Control<br>RLS by clearance}
+    A[Doc Sources] --> B[Ingest]
+    B --> C[OCR + Clean]
+    C --> D[Chunk + Summarize]
+    D --> E[Embeddings]
+    D --> F[(Raw Docs)]
+    E --> G[(Vector DB)]
+    F --> H[(Metadata DB)]
+    G --> I{Access Control}
     H --> I
-    I --> J[Retriever<br>Top-k chunks filtered by user role]
-    J --> K[Plain Language Translator Agent]
-    K --> L[Response Builder<br>Translation, nuance warnings, sources, confidence]
-    L --> M[Staff / Constituent Interface<br>Web app, API, or approved chat tool]
-    N[Audit Log<br>query, user role, document IDs, citations] --> H
+    I --> J[Retriever]
+    J --> K[Translator Agent]
+    K --> L[Response Builder]
+    L --> M[User Interface]
+    N[Audit Log] --> H
     M --> N
 ```
 
