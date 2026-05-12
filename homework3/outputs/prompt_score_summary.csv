@@ -1,0 +1,4 @@
+prompt_variant,count,mean,std,min,max
+A_basic_summary,3,9.5,0.5,9.0,10.0
+B_decision_support,3,9.416666666666666,0.28867513459481275,9.25,9.75
+C_statistical_depth,3,9.25,0.0,9.25,9.25

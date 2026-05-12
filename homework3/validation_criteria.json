@@ -1,0 +1,25 @@
+{
+  "scale_note": "Each criterion is scored 0-10, not the Module 9 lab's generic Likert scale.",
+  "criteria": {
+    "statistical_accuracy": {
+      "description": "Correctly uses the provided descriptive statistics without inventing values.",
+      "scale": "0-10 integer; 0 = mostly incorrect, 10 = all key numbers are accurate.",
+      "benchmark": "Report should cite mean, median, spread, and high-emitter evidence accurately."
+    },
+    "emissions_interpretation": {
+      "description": "Explains what the CH4 statistics mean for methane emissions and animal variation.",
+      "scale": "0-10 integer; 0 = no interpretation, 10 = clear domain-specific interpretation.",
+      "benchmark": "Report should explain central tendency, variability, skew/outliers, and animal heterogeneity."
+    },
+    "decision_support_value": {
+      "description": "Provides actionable insight for monitoring, management, or mitigation decisions.",
+      "scale": "0-10 integer; 0 = no actionability, 10 = directly useful recommendations.",
+      "benchmark": "Report should identify useful monitoring priorities, not just summarize numbers."
+    },
+    "transparency": {
+      "description": "Makes clear what data were used, what statistics mean, and what limitations exist.",
+      "scale": "0-10 integer; 0 = opaque, 10 = transparent scope, evidence, and limitations.",
+      "benchmark": "Report should mention local visit-level data, feeder scope, and uncertainty/limits."
+    }
+  }
+}

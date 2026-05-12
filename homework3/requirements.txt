@@ -1,0 +1,6 @@
+# homework3/Multi-Agent.py - local CSV + OpenAI validation experiment
+pandas>=2.0.0
+openai>=1.0.0
+python-dotenv>=1.0.0
+scipy>=1.11.0
+matplotlib>=3.8.0

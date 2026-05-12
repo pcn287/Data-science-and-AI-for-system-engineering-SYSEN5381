@@ -1,0 +1,335 @@
+prompt_variant,run_id,report_text
+A_basic_summary,1,"# Methane Emissions Report
+
+## Scope
+This report summarizes the descriptive statistics of methane (CH4) emissions collected from a local GreenFeed system over a period from August 1, 2025, to November 1, 2025, involving 73 animals.
+
+## Key Statistics
+- **Total Measurements**: 1802
+- **Mean CH4 Emissions**: 307.73 g/animal
+- **Median CH4 Emissions**: 295.22 g/animal
+- **Standard Deviation**: 115.95 g/animal
+- **Minimum CH4 Emissions**: 11.99 g/animal
+- **Maximum CH4 Emissions**: 887.83 g/animal
+- **Interquartile Range (IQR)**: 153.06 g/animal
+- **Coefficient of Variation**: 37.68%
+- **Top Emitters by Mean**: 
+  - Animal 2410: 524.94 g/animal
+  - Animal 2435: 501.15 g/animal
+  - Animal 2623: 468.57 g/animal
+
+## Interpretation
+The data reveals a mean methane emission of 307.73 g/animal, with a significant spread as indicated by the standard deviation of 115.95 g/animal. The emissions range from a low of 11.99 g to a high of 887.83 g, suggesting variability in emissions among the animals. The skewness of 0.62 indicates a rightward skew, meaning that a few animals exhibit significantly higher emissions than the majority. The IQR of 153.06 g suggests that the central 50% of emissions are relatively concentrated, despite the presence of high outliers.
+
+## Practical Implication
+Understanding the variability in methane emissions is crucial for targeting interventions to reduce emissions in high emitters. The identification of specific top emitters allows for focused management strategies, such as dietary adjustments or health monitoring, which could lead to overall reductions in methane emissions from the herd. This information is vital for improving sustainability practices in livestock management and addressing environmental impacts associated with methane emissions."
+A_basic_summary,2,"# Methane Emissions Report
+
+## Scope
+This report summarizes the methane emissions data collected from local GreenFeed visits, focusing on a single feeder (ID: 453) and a total of 73 animals over a date range from August 1, 2025, to November 1, 2025. The data consists of 1802 measurements of methane (CH4) emissions.
+
+## Key Statistics
+- **Overall Methane Emissions:**
+  - Count: 1802
+  - Mean: 307.73 g/day
+  - Median: 295.22 g/day
+  - Standard Deviation: 115.95 g/day
+  - Minimum: 11.99 g/day
+  - Maximum: 887.83 g/day
+  - Interquartile Range (IQR): 153.06 g/day
+  - 5th Percentile: 140.52 g/day
+  - 95th Percentile: 519.24 g/day
+  - Skewness: 0.62 (indicating a right skew)
+  - Coefficient of Variation: 37.68%
+
+- **Top Emitters by Mean Emissions:**
+  1. Animal 2410: Mean 524.94 g/day
+  2. Animal 2435: Mean 501.15 g/day
+  3. Animal 2623: Mean 468.57 g/day
+  4. Animal 1537: Mean 445.37 g/day
+  5. Animal 1936: Mean 438.26 g/day
+
+## Interpretation
+The mean methane emission of 307.73 g/day indicates a significant level of emissions from the observed animals. The standard deviation of 115.95 g/day highlights considerable variability in emissions among individuals. The minimum and maximum values (11.99 g/day to 887.83 g/day) suggest that while some animals emit very low levels, others are much higher emitters. The right skewness (0.62) indicates that a small number of animals contribute disproportionately to total emissions, as seen with the top emitters.
+
+The interquartile range of 153.06 g/day shows that the middle 50% of emissions are concentrated between 225.40 g/day and 378.46 g/day, which is a more stable range compared to the overall mean. The 5th and 95th percentiles further illustrate the spread of emissions, with the lower end reflecting minimal emissions and the upper end indicating significant outliers.
+
+## Practical Implication
+Understanding methane emissions at this level of detail is crucial for developing targeted strategies to reduce overall emissions in livestock management. Identifying high emitters allows for focused interventions, such as dietary adjustments or health monitoring, which could lead to improved environmental outcomes and compliance with regulatory standards. Additionally, the variability in emissions suggests that management practices can be tailored to individual animals, potentially enhancing both animal welfare and sustainability in farming practices."
+A_basic_summary,3,"# Methane Emissions Report
+
+## Scope
+This report summarizes the descriptive statistics of methane (CH4) emissions data collected from a local GreenFeed system over a period from August 1, 2025, to November 1, 2025. The analysis includes emissions data from 73 animals, focusing on overall emissions and identifying top emitters.
+
+## Key Statistics
+- **Overall Emissions:**
+  - Total Observations: 1802
+  - Mean CH4 Emissions: 307.73 g/animal
+  - Median CH4 Emissions: 295.22 g/animal
+  - Standard Deviation: 115.95 g/animal
+  - Minimum Emissions: 11.99 g/animal
+  - Maximum Emissions: 887.83 g/animal
+  - Interquartile Range (IQR): 153.06 g/animal
+  - Coefficient of Variation: 37.68%
+
+- **Top Emitters by Mean Emissions:**
+  - Highest Mean: Animal 2410 (524.94 g/animal)
+  - Other Significant Emitters: Animals 2435 (501.15 g/animal), 2623 (468.57 g/animal), and 1537 (445.37 g/animal).
+
+## Interpretation
+The average methane emissions per animal are approximately 307.73 g, with a notable range from 11.99 g to 887.83 g. The data shows a moderate positive skew (0.62), indicating that a small number of animals contribute disproportionately to total emissions. The IQR of 153.06 g suggests a significant variation in emissions among the animals, with the highest emitters showing emissions well above the mean. 
+
+The top emitters exhibit high average emissions, particularly Animal 2410, which stands out as the highest emitter. This indicates potential areas for targeted interventions to reduce emissions.
+
+## Practical Implication
+Understanding the distribution of methane emissions among the animals allows for targeted management strategies. By identifying and focusing on the top emitters, interventions such as dietary adjustments or health monitoring can be implemented to mitigate methane emissions effectively. This approach can contribute to overall reductions in greenhouse gas emissions from livestock, aligning with sustainability goals in agricultural practices."
+B_decision_support,1,"# Methane Emissions Report for Farm Manager
+
+## Scope
+This report summarizes the descriptive statistics of methane (CH4) emissions data collected from GreenFeed visits at your farm, covering a total of 73 animals from August 1, 2025, to November 1, 2025. The data provides insights into overall emissions patterns and identifies specific animals that contribute most significantly to methane emissions.
+
+## Key Statistics
+- **Overall Methane Emissions:**
+  - Total Measurements: 1,802
+  - Mean Emissions: 307.73 g CH4
+  - Median Emissions: 295.22 g CH4
+  - Standard Deviation: 115.95 g CH4
+  - Minimum Emissions: 11.99 g CH4
+  - Maximum Emissions: 887.83 g CH4
+  - Interquartile Range (IQR): 153.06 g CH4
+  - Coefficient of Variation: 37.68%
+
+- **Top Emitters by Mean:**
+  - **Animal 2410:** Mean 524.94 g CH4 (3 measurements)
+  - **Animal 2435:** Mean 501.15 g CH4 (2 measurements)
+  - **Animal 2623:** Mean 468.57 g CH4 (15 measurements)
+  - **Animal 1537:** Mean 445.37 g CH4 (12 measurements)
+  - **Animal 1936:** Mean 438.26 g CH4 (42 measurements)
+
+## Interpretation
+The methane emissions data reveals a significant variation in emissions among the animals, with a mean of 307.73 g CH4 and a maximum of 887.83 g CH4. The skewness of 0.62 indicates a rightward skew, suggesting that a few animals are emitting substantially more methane than the majority. The presence of high emitters (e.g., Animal 2410 with a mean of 524.94 g CH4) highlights specific animals that are contributing disproportionately to overall emissions.
+
+The interquartile range (IQR) of 153.06 g CH4 indicates that the middle 50% of emissions are relatively concentrated, yet the wide range (875.83 g CH4) points to some outliers that warrant further investigation.
+
+## Practical Implications
+1. **Monitoring Priorities:** Focus on the top emitters, particularly Animals 2410, 2435, and 2623, as they are contributing significantly to methane emissions. Regular monitoring of these animals can help identify factors leading to their elevated emissions.
+
+2. **Management Strategies:** Consider implementing dietary adjustments or health interventions for the high-emitting animals. Changes in feed composition or health management may reduce their methane output.
+
+3. **Benchmarking and Goals:** Use the mean and median emissions as benchmarks for the herd. Aim to lower the average emissions by targeting the highest emitters for intervention, which could lead to a more sustainable farming practice.
+
+4. **Data-Driven Decisions:** Continue to collect and analyze methane emissions data regularly. This ongoing monitoring will provide insights into the effectiveness of any interventions and help refine strategies to reduce overall emissions.
+
+By prioritizing the management of high-emitting animals and utilizing the data effectively, you can take actionable steps towards reducing methane emissions on your farm."
+B_decision_support,2,"# Methane Emissions Report
+
+## Scope
+This report summarizes methane (CH4) emissions data collected from GreenFeed visits for a total of 73 animals over the period from August 1, 2025, to November 1, 2025. The focus is on identifying key emitters and providing actionable insights to guide management decisions.
+
+## Key Statistics
+- **Total Visits Recorded**: 1802
+- **Mean CH4 Emissions**: 307.73 g/day
+- **Median CH4 Emissions**: 295.22 g/day
+- **Standard Deviation**: 115.95 g/day
+- **Minimum Emissions**: 11.99 g/day
+- **Maximum Emissions**: 887.83 g/day
+- **Interquartile Range (IQR)**: 153.06 g/day
+- **Top Emitters by Mean CH4 Emissions**:
+  - Animal 2410: 524.94 g/day
+  - Animal 2435: 501.15 g/day
+  - Animal 2623: 468.57 g/day
+  - Animal 1537: 445.37 g/day
+  - Animal 1936: 438.26 g/day
+
+## Interpretation
+The data indicates a wide range of methane emissions among the animals, with a mean of 307.73 g/day and a maximum of 887.83 g/day, suggesting significant variability in emissions. The positive skewness (0.62) indicates that a few animals are contributing disproportionately to the overall emissions, which is further supported by the high standard deviation (115.95 g/day). 
+
+The top emitters—particularly Animals 2410 and 2435—show mean emissions significantly above the overall average, indicating they are key contributors to methane output. Monitoring the emissions of these animals closely is essential, as they represent the highest potential for reduction efforts.
+
+## Practical Implication
+To effectively manage methane emissions on the farm, the following actions are recommended:
+
+1. **Targeted Monitoring**: Focus on the identified top emitters (Animals 2410, 2435, and others listed) for more frequent monitoring and assessment. Understanding their feeding patterns, health status, and any behavioral factors could help identify causes of high emissions.
+
+2. **Nutritional Adjustments**: Investigate dietary changes or feeding strategies for high-emission animals. Improving feed efficiency may reduce methane output.
+
+3. **Regular Data Review**: Establish a routine for reviewing emissions data to track changes over time and assess the impact of any management interventions.
+
+4. **Education and Training**: Educate staff on the importance of monitoring methane emissions and the role of animal management in reducing overall emissions.
+
+By prioritizing these actions, the farm can better manage methane emissions, contributing to environmental sustainability while potentially improving operational efficiency."
+B_decision_support,3,"# Methane Emissions Report for Farm Manager
+
+## Scope
+This report provides an analysis of methane (CH4) emissions data collected from GreenFeed visits at your farm, focusing on the period from August 1, 2025, to November 1, 2025. The data encompasses 73 animals, with a total of 1,802 emissions measurements recorded.
+
+## Key Statistics
+- **Overall CH4 Emissions:**
+  - Mean: 307.73 g/day
+  - Median: 295.22 g/day
+  - Standard Deviation: 115.95 g/day
+  - Minimum: 11.99 g/day
+  - Maximum: 887.83 g/day
+  - 5th Percentile: 140.52 g/day
+  - 95th Percentile: 519.24 g/day
+  - Interquartile Range (IQR): 153.06 g/day
+  - Coefficient of Variation: 37.68%
+
+- **Top Emitters by Mean:**
+  1. **Animal 2410**: Mean CH4 524.94 g/day
+  2. **Animal 2435**: Mean CH4 501.15 g/day
+  3. **Animal 2623**: Mean CH4 468.57 g/day
+  4. **Animal 1537**: Mean CH4 445.37 g/day
+  5. **Animal 1936**: Mean CH4 438.26 g/day
+
+## Interpretation
+The average methane emissions across all animals are 307.73 g/day, with a notable variation indicated by a standard deviation of 115.95 g/day. This suggests that while many animals are emitting at lower levels, there are significant outliers contributing to higher emissions. The maximum recorded emission was 887.83 g/day, which is substantially above the mean. 
+
+The top emitters, particularly Animals 2410 and 2435, are crucial to monitor as they have the highest mean emissions. Their emissions are more than 70% above the overall mean, indicating that targeted interventions could yield significant reductions in total methane output.
+
+## Practical Implications
+1. **Monitoring Priorities**: Focus on the top emitters (Animals 2410, 2435, and 2623) for closer observation and potential dietary adjustments or management practices to reduce methane emissions. 
+
+2. **Intervention Strategies**: Consider implementing strategies such as feed additives, changes in feeding schedules, or health assessments for high-emission animals to mitigate their impact.
+
+3. **Overall Emission Management**: Regular monitoring of all animals is essential, given the variability in emissions. The IQR and percentiles suggest that while some animals are performing well, there are enough high emitters to warrant further investigation and action.
+
+4. **Data-Driven Decisions**: Use this data to inform management decisions, focusing on reducing emissions from the highest contributors, which can lead to more sustainable farming practices and potential cost savings.
+
+By prioritizing monitoring and intervention for the highest methane emitters, you can effectively manage and reduce overall methane emissions on your farm."
+C_statistical_depth,1,"# Methane Emissions Report
+
+## Scope
+This report analyzes methane (CH4) emissions data collected from a single feeder (ID: 453) over a period from August 1, 2025, to November 1, 2025. The dataset includes visit-level CH4 emissions for 73 animals, totaling 1802 observations. The analysis focuses on central tendency, variability, skewness, and heterogeneity among individual animals.
+
+## Key Statistics
+### Overall CH4 Emissions
+- **Count**: 1802
+- **Mean**: 307.73 g/day
+- **Median**: 295.22 g/day
+- **Standard Deviation**: 115.95 g/day
+- **Minimum**: 11.99 g/day
+- **Maximum**: 887.83 g/day
+- **Range**: 875.83 g/day
+- **First Quartile (Q1)**: 225.40 g/day
+- **Third Quartile (Q3)**: 378.46 g/day
+- **Interquartile Range (IQR)**: 153.06 g/day
+- **5th Percentile (P05)**: 140.52 g/day
+- **95th Percentile (P95)**: 519.24 g/day
+- **Skewness**: 0.62
+- **Kurtosis**: 0.67
+- **Coefficient of Variation (CV)**: 37.68%
+
+### Top Emitters by Mean
+1. **Animal 2410**: Mean = 524.94 g/day, Std = 15.10 g/day
+2. **Animal 2435**: Mean = 501.15 g/day, Std = 0.00 g/day
+3. **Animal 2623**: Mean = 468.57 g/day, Std = 142.67 g/day
+4. **Animal 1537**: Mean = 445.37 g/day, Std = 169.83 g/day
+5. **Animal 1936**: Mean = 438.26 g/day, Std = 98.42 g/day
+
+## Interpretation
+### Central Tendency
+The mean CH4 emissions across all observations is approximately 307.73 g/day, with a median of 295.22 g/day. The slight difference between the mean and median indicates a right skew in the data distribution, as suggested by the skewness value of 0.62.
+
+### Variability
+The standard deviation of 115.95 g/day indicates a considerable spread of the CH4 emissions around the mean, with the IQR of 153.06 g/day further highlighting the variability within the central 50% of the data. The coefficient of variation (CV) of 37.68% suggests that there is a moderate level of relative variability in emissions when compared to the mean.
+
+### Extremes
+The minimum observed CH4 emission was 11.99 g/day, while the maximum was 887.83 g/day, resulting in a substantial range of 875.83 g/day. The 5th and 95th percentiles (140.52 g/day and 519.24 g/day respectively) indicate that most animals have emissions clustered around the lower to mid-range, with a few outliers contributing to higher emissions.
+
+### Per-Animal Heterogeneity
+The top emitters show significant heterogeneity in CH4 emissions. For instance, Animal 2410 has a mean emission of 524.94 g/day with a low standard deviation of 15.10 g/day, indicating consistent high emissions. In contrast, Animal 2623 has a mean of 468.57 g/day but a much higher standard deviation of 142.67 g/day, indicating greater variability in emissions for this animal.
+
+## Practical Implications
+Understanding the variability and central tendencies in methane emissions is crucial for developing targeted interventions to reduce emissions in livestock. The identification of top emitters can guide management practices, such as dietary adjustments or health monitoring, to mitigate emissions. Furthermore, recognizing the skewness and variability can help in formulating policies aimed at improving overall herd efficiency and environmental impact."
+C_statistical_depth,2,"# Methane Emissions Report: Local GreenFeed Visit-Level CH4 Data
+
+## Scope
+This report provides a statistical analysis of methane (CH4) emissions data from a local GreenFeed system, focusing on 73 animals over a date range from August 1, 2025, to November 1, 2025. The analysis includes descriptive statistics for overall methane emissions as well as insights into the top emitters.
+
+## Key Statistics
+- **Overall CH4 Emissions:**
+  - Count: 1802
+  - Mean: 307.73 g
+  - Median: 295.22 g
+  - Standard Deviation: 115.95 g
+  - Minimum: 11.99 g
+  - Maximum: 887.83 g
+  - Range: 875.83 g
+  - First Quartile (Q1): 225.40 g
+  - Third Quartile (Q3): 378.46 g
+  - Interquartile Range (IQR): 153.06 g
+  - 5th Percentile (P05): 140.52 g
+  - 95th Percentile (P95): 519.24 g
+  - Skewness: 0.62
+  - Kurtosis: 0.67
+  - Coefficient of Variation (CV): 37.68%
+
+## Interpretation
+### Central Tendency
+The mean CH4 emission level is 307.73 g, which is slightly higher than the median value of 295.22 g. This suggests a right-skewed distribution, as the mean is influenced by higher values in the dataset.
+
+### Variability
+The standard deviation of 115.95 g indicates a moderate level of variability in methane emissions among the animals. The range of 875.83 g, from a minimum of 11.99 g to a maximum of 887.83 g, further underscores the substantial differences in emissions.
+
+### Interquartile Range (IQR)
+The IQR of 153.06 g (Q3 - Q1) indicates that the middle 50% of emissions fall between 225.40 g and 378.46 g. This range provides a more robust measure of variability that is less affected by extreme values.
+
+### Coefficient of Variation
+The coefficient of variation of 37.68% suggests that the emissions vary significantly relative to the mean. A higher CV indicates greater per-animal heterogeneity in methane emissions.
+
+### Skewness
+The positive skewness of 0.62 indicates that there are a number of animals with higher methane emissions that are pulling the mean upward, confirming the presence of outliers in the data.
+
+### Extremes
+The extreme values in the dataset, specifically the maximum emission of 887.83 g and the minimum of 11.99 g, highlight the disparity in methane production among the animals. The 95th percentile value of 519.24 g indicates that a small percentage of animals are responsible for a large portion of the emissions.
+
+### Per-Animal Heterogeneity
+The top emitters show significant variability in their methane production. For example, Animal 2410 has a mean emission of 524.94 g with a small standard deviation of 15.1 g, indicating consistent high emissions. In contrast, Animal 2623 has a mean of 468.57 g but a higher standard deviation of 142.67 g, suggesting more variability in its emissions.
+
+## Practical Implications
+The findings indicate that while the average methane emissions are relatively moderate, there are significant outliers contributing to higher emissions. This information can be crucial for targeted interventions aimed at reducing methane emissions in livestock. By identifying and focusing on the top emitters, strategies can be developed to mitigate emissions effectively, potentially through dietary adjustments or management practices. Understanding the variability and skewness in emissions can help in creating tailored approaches to improve overall herd efficiency and reduce environmental impact."
+C_statistical_depth,3,"# Methane Emissions Report
+
+## Scope
+This report presents an analysis of methane (CH4) emissions data collected from a single feeder (ID: 453) over a period from August 1, 2025, to November 1, 2025. The dataset includes emissions measurements from 73 animals, with a total of 1802 observations recorded.
+
+## Key Statistics
+- **Overall CH4 Emissions:**
+  - Count: 1802
+  - Mean: 307.73 g/day
+  - Median: 295.22 g/day
+  - Standard Deviation: 115.95 g/day
+  - Minimum: 11.99 g/day
+  - Maximum: 887.83 g/day
+  - Range: 875.83 g/day
+  - First Quartile (Q1): 225.40 g/day
+  - Third Quartile (Q3): 378.46 g/day
+  - Interquartile Range (IQR): 153.06 g/day
+  - 5th Percentile (P05): 140.52 g/day
+  - 95th Percentile (P95): 519.24 g/day
+  - Skewness: 0.62
+  - Kurtosis: 0.67
+  - Coefficient of Variation (CV): 37.68%
+
+## Interpretation
+### Central Tendency
+The mean CH4 emissions of 307.73 g/day indicates the average methane output across all recorded visits. The median value of 295.22 g/day suggests that half of the observations fall below this value, indicating a somewhat symmetrical distribution around the mean.
+
+### Variability
+The standard deviation of 115.95 g/day indicates a moderate level of variability in emissions across the dataset. The coefficient of variation (CV) at 37.68% suggests that the standard deviation is a significant proportion of the mean, indicating that there is considerable heterogeneity in emissions among the animals.
+
+### Interquartile Range (IQR)
+The IQR of 153.06 g/day, which is the difference between the first quartile (Q1: 225.40 g/day) and the third quartile (Q3: 378.46 g/day), highlights that the middle 50% of the data is spread over a substantial range. This suggests that while some animals emit lower amounts of methane, others emit significantly higher amounts.
+
+### Skewness
+The positive skewness value of 0.62 indicates that there are some higher emissions that are pulling the mean upwards, suggesting a right-tailed distribution. This could imply that a few animals are responsible for a disproportionately high level of methane emissions.
+
+### Extremes
+The minimum recorded emissions were 11.99 g/day, while the maximum reached 887.83 g/day, indicating a wide range of emissions among the animals. The presence of such extremes suggests that specific animals may be significantly different in terms of their methane output.
+
+### Per-Animal Heterogeneity
+The top emitters exhibit notable variation in their methane output. For instance, the animal with the highest mean emissions (Animal ID: 2410) had a mean of 524.94 g/day with a small standard deviation of 15.1 g/day, indicating consistent high emissions. Conversely, other animals like Animal ID: 2435 had a uniform output of 501.15 g/day with no variability (std = 0.0), suggesting that this particular animal consistently emits the same amount of methane.
+
+## Practical Implications
+Understanding the variability and central tendencies in methane emissions is crucial for developing targeted strategies to manage and reduce emissions in livestock. Identifying high emitters can help in implementing specific dietary or management interventions to mitigate their methane output. Additionally, the data suggests that while most animals have moderate emissions, a small number may contribute disproportionately to total emissions, warranting focused attention. This information is vital for improving environmental sustainability in livestock management and addressing climate change impacts."

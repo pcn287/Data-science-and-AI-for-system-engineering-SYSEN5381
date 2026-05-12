@@ -1,0 +1,8 @@
+{
+  "test": "one-way ANOVA",
+  "f_statistic": 0.4375,
+  "p_value": 0.664715,
+  "best_prompt_by_mean_score": "A_basic_summary",
+  "significant_at_0.05": false,
+  "interpretation": "A_basic_summary had the highest mean validation score. The prompt differences are not statistically significant at alpha = 0.05."
+}
